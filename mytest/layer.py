@@ -94,11 +94,81 @@ class layer:
         out = np.where(x >= 0, 1, 0)
         return out.reshape(x.shape)
 
+    # def sigmoid(self, x):
+    #     return 1 / (1 + np.exp(-x))
+    #
+    # def sigmoid(self, x):
+    #     return 1 / (1 + np.exp(-x))
+
+
 class lastlayer:
-    def __init__(self):
+    # 定义基本属性
+    Y_matrix = 0
+    X_matrix = 0
+    DFDY_matrix = 0
+    DFDX_matrix = 0
+    # 定义私有属性,私有属性在类外部无法直接进行访问
+    __input_size = 0
+    __output_size = 0
+    __type = 0  # active fun type ; sigmod函数:0 ;  relu函数:1;
+    def __init__(self，input_size,output_size,type=0):             #type表示了使用softmax函数来进行
+        self.__input_size = input_size
+        self.__output_size = output_size
+        self.__type = type
+
+
+    def set_X_matrix(self,input):
+        self.X_matrix = input
+        pass
+
+    def set_DFDY_matrix(self,input):
+        self.DFDY_matrix = input
+        pass
+
+    def forward(self):
+        if type == 0:    #如果为softmax函数
+            self.Y_matrix = self.softmax(self.X_matrix)
+
+
+    def backward(self):
+
         pass
 
 
+    def softmax(self, a):
+        c = np.max(a, axis=1)
+        numtmp = c.size
+        c = c.reshape(numtmp, 1)
+        b = a - c
+        exp_a = np.exp(b)
+        sum_exp_a = np.sum(exp_a, axis=1)
+        numtmp2 = sum_exp_a.size
+        sum_exp_a = sum_exp_a.reshape(numtmp2, 1)
+        y = exp_a / sum_exp_a
+        return y
+
+
+    def Dsoftmax(self, a):           #softmax函数的逆函数
+        DYDX_matrix = np.zeros(shape=(self.__input_size,self.__output_size),dtype=float)   #初始化一个偏导数矩阵
+
+        c = np.max(a, axis=1)
+        numtmp = c.size
+        c = c.reshape(numtmp, 1)
+        b = a - c
+        exp_a = np.exp(b)
+        sum_exp_a = np.sum(exp_a, axis=1)
+        sum_exp_a_2 = sum_exp_a**2
+
+
+        for index, element in enumerate(DYDX_matrix):
+            if index(0) == index(1):
+                pass
+            else：
+                pass
+
+            DYDX_matrix[index] =
+
+        pass
 
 
 #test

@@ -9,7 +9,7 @@ abs_file=__file__
 print("abs path is %s" %(__file__))
 abs_dir=abs_file[:abs_file.rfind("\\")]     # windows下用\\分隔路径，linux下用/分隔路径
 from mongoengine import *
-connect('mnist',host='192.168.2.17')
+connect('mnist',host='127.0.0.1')
 
 class mnist_train_image(Document):
     tag = ListField(StringField(required=True))
