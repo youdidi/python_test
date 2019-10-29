@@ -107,11 +107,12 @@ class lastlayer:
     X_matrix = 0
     DFDY_matrix = 0
     DFDX_matrix = 0
+    DYDX_matrix = 0
     # 定义私有属性,私有属性在类外部无法直接进行访问
     __input_size = 0
     __output_size = 0
     __type = 0  # active fun type ; sigmod函数:0 ;  relu函数:1;
-    def __init__(self，input_size,output_size,type=0):             #type表示了使用softmax函数来进行
+    def __init__(self,input_size,output_size,type=0):             #type表示了使用softmax函数来进行
         self.__input_size = input_size
         self.__output_size = output_size
         self.__type = type
@@ -126,17 +127,19 @@ class lastlayer:
         pass
 
     def forward(self):
-        if type == 0:    #如果为softmax函数
+        if self.__type == 0:    #如果为softmax函数
             self.Y_matrix = self.softmax(self.X_matrix)
 
 
     def backward(self):
+        if self.__type == 0:
+            self.DYDX_matrix = self.Dsoftmax(self.X_matrix)
+            self.DFDX_matrix = self.DFDY_matrix * self.DYDX_matrix.T
 
-        pass
 
 
     def softmax(self, a):
-        c = np.max(a, axis=1)
+        c = np.max(a, axis=0)
         numtmp = c.size
         c = c.reshape(numtmp, 1)
         b = a - c
@@ -149,9 +152,18 @@ class lastlayer:
 
 
     def Dsoftmax(self, a):           #softmax函数的逆函数
-        DYDX_matrix = np.zeros(shape=(self.__input_size,self.__output_size),dtype=float)   #初始化一个偏导数矩阵
+        out_DYDX_matrix = np.zeros(shape=(a.size,a.size),dtype=float)   #初始化一个偏导数矩阵
+        # """
+        #     偏导数矩阵类似如下：
+        #
+        #     dt1/dx1 dt2/dx1 dt3/dx1
+        #     dt1/dx2 dt2/dx2 dt3/dx2
+        #     dt1/dx3 dt2/dx3 dt3/dx3
+        #
+        #     """
 
-        c = np.max(a, axis=1)
+        #求一些中间需要量
+        c = np.max(a, axis=0)
         numtmp = c.size
         c = c.reshape(numtmp, 1)
         b = a - c
@@ -160,26 +172,91 @@ class lastlayer:
         sum_exp_a_2 = sum_exp_a**2
 
 
-        for index, element in enumerate(DYDX_matrix):
-            if index(0) == index(1):
-                pass
-            else：
-                pass
 
-            DYDX_matrix[index] =
+        it = np.nditer(out_DYDX_matrix, flags=['multi_index'], op_flags=['readwrite'])    #通过这种方式来遍历numpy矩阵
+        while not it.finished:
+            index = it.multi_index
+            if index[0] == index[1]:     #对于对角线元素
+                out_DYDX_matrix[index] = (exp_a[(0,index[1])]*(sum_exp_a - exp_a[(0,index[1])]))/sum_exp_a_2
+            else:
+                out_DYDX_matrix[index] = (-exp_a[(0,index[1])] * exp_a[(0,index[0])])/sum_exp_a_2
+            it.iternext()
 
+        return out_DYDX_matrix
+
+        # for index, element in enumerate(out_DYDX_matrix):           #根据求偏导结果
+        #     # if index(0) == index(1):     #对于对角线元素
+        #     #     element = (exp_a(index(1))*(sum_exp_a - exp_a(index(1))))/sum_exp_a_2
+        #     # else:
+        #     #     element = (-exp_a(index(1)) * exp_a(index(0)))/sum_exp_a_2
+
+
+class losslayer:
+    # 定义基本属性
+    Y_matrix = 0      #前向计算的输出结果
+    T_matrix = 0      #用于对比的正确结果
+    DFDY_matrix = 0   #计算出来的反向传播的初始偏导数
+    loss = 0          #输出的loss结果
+    # 定义私有属性,私有属性在类外部无法直接进行访问
+    __input_size = 0
+    __output_size = 0
+    __type = 0  # loss fun type ; cross_entropy_error:0 ;  误差平方和函数:1;
+    def __init__(self,input_size,output_size=1,type=0):     #构造函数
+        self.__input_size = input_size
+        self.__output_size = output_size
+        self.__type = type
         pass
+
+    def set_T_matrix(self,T_matrix):
+        self.T_matrix = T_matrix
+
+    def set_Y_matrix(self,Y_matrix):
+        self.Y_matrix = Y_matrix
+
+    def forward(self):      #前向求最后的loss
+        pass
+
+    def backward(self):     #反向传播求DFDY_matrix，计算出来的反向传播的初始偏导数
+        pass
+
+
+    def cross_entropy_error(self,y, t):          #交叉项误差
+        delta = 1e-7
+        return -np.sum(t * np.log(y + delta))
+
+    def SSE(self,y,t):               #Sum of Squared Error 误差平方和
+        out = np.sum((y-t)**2)
+        return out
+
+    def Dcross_entropy_error(self,y, t):       #交叉项函数的导函数，返回两组偏导数
+        pass
+
+    def DSSE(self,y,t):                        #误差平方和函数，返回两组偏导数
+        pass
+
+
+
 
 
 #test
 
-lay = layer(3,2,0)
-x = np.array([2,3,4])
-lay.set_X_matrix(x)
-DFDA_matrix = np.array([2,3])
-lay.set_DFDA_matrix(DFDA_matrix)
-lay.forward()
-lay.backward()
+# lay = layer(3,2,0)
+# x = np.array([2,3,4])
+# lay.set_X_matrix(x)
+# DFDA_matrix = np.array([2,3])
+# lay.set_DFDA_matrix(DFDA_matrix)
+# lay.forward()
+# lay.backward()
+#
+# print(lay.A_matrix)
+# print(lay.DFDX_matrix)
 
-print(lay.A_matrix)
-print(lay.DFDX_matrix)
+lastlay = lastlayer(4,4)
+x = np.array([2,3,4])
+DFDY_matrix = np.array([2,3,1])
+lastlay.set_X_matrix(x)
+lastlay.set_DFDY_matrix(DFDY_matrix)
+lastlay.forward()
+lastlay.backward()
+print(lastlay.Y_matrix)
+print(lastlay.DFDX_matrix)
