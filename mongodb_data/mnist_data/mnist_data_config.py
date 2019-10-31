@@ -198,12 +198,12 @@ class mnist_data:
 # print(photo)
 # print(type)
 #单例
-mnist_data = mnist_data()
-
-(imgs, tags) = mnist_data.get_train_data_from_mongodb(100)
-print(len(imgs))
-print(len(tags))
-print(tags)
+# mnist_data = mnist_data()
+#
+# (imgs, tags) = mnist_data.get_train_data_from_mongodb(100)
+# print(len(imgs))
+# print(len(tags))
+# print(tags)
 
 # (imgs, tags) = mnist_data.get_t10k_data_from_mongodb(10)
 # print(len(imgs))

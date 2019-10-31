@@ -87,7 +87,7 @@ class two_net:
     def value(self):                        #计算本次batch的识别准确率
         count_right = 0
         for i in range(self.__batch_size):
-            if self.output_predict[i] == self.T_data[i]   #如果预测结果正确，则正确结果+1
+            if self.output_predict[i] == self.T_data[i]:   #如果预测结果正确，则正确结果+1
                 count_right = count_right + 1
 
         return (count_right/self.__batch_size) * 100
