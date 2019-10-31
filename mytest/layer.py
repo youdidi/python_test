@@ -318,17 +318,17 @@ class losslayer:
 # print(losslay.loss)
 # print(losslay.DFDY_matrix)
 
-#test for 多个输入
-lay = layer(input_size=(2,3),output_size=(2,2),active_fun=0)
-x = np.array([[2,3,4],[1,2,3]])
-lay.set_X_matrix(x)
-DFDA_matrix = np.array([[2,3],[1,1]])
-lay.set_DFDA_matrix(DFDA_matrix)
-lay.forward()
-lay.backward()
-
-print(lay.A_matrix)
-print(lay.DFDX_matrix)
+# #test for 多个输入
+# lay = layer(input_size=(2,3),output_size=(2,2),active_fun=0)
+# x = np.array([[2,3,4],[1,2,3]])
+# lay.set_X_matrix(x)
+# DFDA_matrix = np.array([[2,3],[1,1]])
+# lay.set_DFDA_matrix(DFDA_matrix)
+# lay.forward()
+# lay.backward()
+#
+# print(lay.A_matrix)
+# print(lay.DFDX_matrix)
 #
 # lastlay = lastlayer(input_size=(3,4),output_size=(3,4),type=0)
 # x = np.array([[2,3,4,5],[3,4,5,2],[2,2,1,2]])
