@@ -79,7 +79,7 @@ class two_net:
 
     def predict(self):                     #经过前向传播后，再估计一个值。注意：本函数必须在forward函数执行后才能执行。
         out = np.zeros(self.softmaxlay.Y_matrix.shape)
-        idx = self.softmaxlay.Y_matrix.argmax(axis=0)
+        idx = self.softmaxlay.Y_matrix.argmax(axis=-1)
         out[np.arange(self.softmaxlay.Y_matrix.shape[0]), idx[np.arange(self.softmaxlay.Y_matrix.shape[0])]] = 1
         self.output_predict = out
         pass
@@ -87,7 +87,7 @@ class two_net:
     def value(self):                        #计算本次batch的识别准确率
         count_right = 0
         for i in range(self.__batch_size):
-            if self.output_predict[i] == self.T_data[i]:   #如果预测结果正确，则正确结果+1
+            if (self.output_predict[i] == self.T_data[i]).all():   #如果预测结果正确，则正确结果+1
                 count_right = count_right + 1
 
         return (count_right/self.__batch_size) * 100

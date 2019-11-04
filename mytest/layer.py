@@ -68,7 +68,7 @@ class layer:
             DADZ_matrix = self.Drelu(self.Z_matrix)
             self.DFDZ_matrix = self.DFDA_matrix * DADZ_matrix
 
-        print((self.DFDZ_matrix).size)
+        #print((self.DFDZ_matrix).size)
         # self.DFDZ_matrix = self.DFDZ_matrix.reshape(1,self.DFDZ_matrix.size)     #整个形
         #以上完成了DFDA到DFDZ的传播
         #接着完成DFDZ到DFDW的传播,进行推导后发现可以用矩阵乘法容易获得。
