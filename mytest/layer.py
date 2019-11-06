@@ -29,7 +29,8 @@ class layer:
         self.__input_size = input_size
         self.__output_size = output_size
         self.W_matrix = np.random.randn(input_size[1],output_size[1])  #随机初始化W矩阵，权重矩阵
-        self.B_matrix = np.random.randn(1,output_size[1])     #随机初始化B矩阵，偏置矩阵
+        self.B_matrix = np.zeros(shape=(1, output_size[1]))
+        # self.B_matrix = np.random.randn(1,output_size[1])     #随机初始化B矩阵，偏置矩阵
         # self.Z_matrix = np.zeros(shape=(1,output_size),dtype=float)     #初始化Z矩阵为全0矩阵
         # self.A_matrix = np.zeros(shape=(1,output_size),dtype=float)     #初始化A矩阵为全0矩阵
         # self.DFDZ_matrix = np.zeros(shape=(1, output_size), dtype=float)  # 初始化DFDZ_matrix矩阵为全0矩阵

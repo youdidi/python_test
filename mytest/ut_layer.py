@@ -32,7 +32,7 @@ def loss(mnist_ut_two_net):
 
 
 if __name__ == '__main__':
-    mnist_ut_two_net = two_net(lay1_size=(784, 20), lay2_size=(20, 10), action_fun=0, loss_fun=0, batch_size=1,
+    mnist_ut_two_net = two_net(lay1_size=(784, 20), lay2_size=(20, 10), action_fun=1, loss_fun=1, batch_size=1,
                                learn_rate=0.1)
     mnist_data = mnist_data()
     for x in range(2000):
@@ -40,7 +40,7 @@ if __name__ == '__main__':
         # 准备好图像数据
         input_data = np.zeros(shape=(1, 784), dtype=float)
         for i in range(len(imgs)):
-            input_data[i] = imgs[i].reshape(1, imgs[i].size)
+            input_data[i] = imgs[i].reshape(1, imgs[i].size) / 255.0
 
         # 再准备好对标数据
         T_data = np.zeros(shape=(1, 10), dtype=float)
@@ -67,9 +67,9 @@ if __name__ == '__main__':
         # print(mnist_ut_two_net.lay1.B_matrix)
         # print(mnist_ut_two_net.lay1.DFDA_matrix)
         # print(mnist_ut_two_net.lay1.DFDZ_matrix)
-        print('lay1.DFDW_matrix',mnist_ut_two_net.lay1.DFDW_matrix)
+        # print('lay1.DFDW_matrix',mnist_ut_two_net.lay1.DFDW_matrix)
         # print(mnist_ut_two_net.lay1.DFDX_matrix)
-        print('lay1.DFDB_matrix',mnist_ut_two_net.lay1.DFDB_matrix)
+        # print('lay1.DFDB_matrix',mnist_ut_two_net.lay1.DFDB_matrix)
         # print(mnist_ut_two_net.lay1.Z_matrix)
         # print(mnist_ut_two_net.lay1.A_matrix)
         #
@@ -78,7 +78,7 @@ if __name__ == '__main__':
         # print(mnist_ut_two_net.lay2.B_matrix)
         # print(mnist_ut_two_net.lay2.DFDA_matrix)
         # print(mnist_ut_two_net.lay2.DFDZ_matrix)
-        # print(mnist_ut_two_net.lay2.DFDW_matrix)
+        print('lay2.DFDW_matrix',mnist_ut_two_net.lay2.DFDW_matrix)
         # print(mnist_ut_two_net.lay2.DFDX_matrix)
         # print(mnist_ut_two_net.lay2.DFDB_matrix)
         # print(mnist_ut_two_net.lay2.Z_matrix)
@@ -99,8 +99,8 @@ if __name__ == '__main__':
 
         #利用数值法求梯度，进行比较
         f = lambda w: loss(mnist_ut_two_net)
-        dW = numerical_gradient(f, mnist_ut_two_net.lay1.W_matrix)
-        print(dW)
+        dW = numerical_gradient(f, mnist_ut_two_net.lay2.W_matrix)
+        print('DW',dW)
 
         pass
 
